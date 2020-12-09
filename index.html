@@ -3,15 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
   <title>Document</title>
 </head>
 <body>
-  <div class="container" style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-    <select name="select" id="select">
-      
+  <main class="main container" id="main">
+    <select name="selectName" id="selectNameId">
+      <option value="all">Выберите персонажа</option>
     </select>
-  </div>
+    <select name="selectsGender" id="selectGenderId">
+      <option value="all">Выберите пол</option>
+    </select>
+    <select name="selectStatus" id="selectStatusId">
+      <option value="all">Выберите статус</option>
+    </select>
+    <input type="text" id="inputName">
+  </main>
+  <header class="header">
+  </header>
   <script src="script.js"></script>
 </body>
 </html>

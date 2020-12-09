@@ -1,8 +1,9 @@
 [
   {
     "name": "Ancient One",
+    "realName": "Ancient One",
     "species": "human",
-    "gender": "Female",
+    "gender": "female",
     "birthDay": "1316",
     "deathDay": "2017",
     "status": "deceased",
