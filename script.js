@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', ()=>{
 'use strict';
 
 const genderOptions = [],
@@ -41,7 +40,7 @@ function practice(response){
         </div>
       </div>
     `;
-
+    //выводим все карточки на экран
     document.querySelector('.header').insertAdjacentHTML("beforeEnd", card);
   });
 
@@ -53,6 +52,7 @@ function practice(response){
     return item !== undefined;
   });
 
+  //убираю все повторяющиеся элементы с помощью Set коллекции
   let setGender = new Set(genderOptions),
       setCharStatus = new Set(statusOptions),
       setMovie = new Set(movieOptions);
@@ -68,13 +68,14 @@ function practice(response){
       document.querySelector(`${id}`).append(option);
     });
   };
-
+  // вставляю списки элементов по соответствующим категориям
   addOptions(setGender, '#selectGenderId');
   addOptions(setCharStatus, '#selectStatusId');
   addOptions(setMovie, '#selectMovieId');
 
   let cards = document.querySelectorAll('.card');
 
+  //живой поиск по содержанию карточек
   document.querySelector('#inputName').addEventListener('input', ()=>{
     let val = document.querySelector('#inputName').value.toLowerCase().trim();
     if(val !=''){
@@ -183,4 +184,3 @@ function practice(response){
   });
   });
 }
-});
