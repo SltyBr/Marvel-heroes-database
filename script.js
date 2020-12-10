@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', ()=>{
 'use strict';
 
-const main = document.querySelector('#main'),
-      header = document.querySelector('.header'),
-      genderOptions = [],
-      statusOptions = [],
-      apiUrl = './dbHeroes.json';
-      let movieOptions = [];
+
+const photo = document.querySelector('.photo');
+const genderOptions = [];
+const statusOptions = [];
+const apiUrl = './dbHeroes.json';
+
+/* async function getHeroes(){
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+}
+getHeroes(); */
+
  
 fetch(apiUrl)
     .then(response => response.json())
@@ -14,11 +20,10 @@ fetch(apiUrl)
 
 function practice(response){
 
-  response.forEach(({realName, gender, status, photo, movies})=>{
+  response.forEach(({realName, gender, status, photo})=>{
 
     genderOptions.push(gender);
     statusOptions.push(status);
-    movieOptions.push(movies);
 
     let optionName = document.createElement('option');
     optionName.textContent = realName;
@@ -26,7 +31,7 @@ function practice(response){
     document.querySelector('#selectNameId').append(optionName);
 
     const card =`
-      <div class="card" attrName="${realName}" attrGender="${gender}" attrStatus="${status}" attrMovie="${movies}">
+      <div class="card" attrName="${realName}" attrGender="${gender}" attrStatus="${status}">
         <div class="card-img">
           <img src="${photo}" alt="">
         </div>
@@ -42,28 +47,11 @@ function practice(response){
       </div>
     `;
 
-    header.insertAdjacentHTML("beforeEnd", card);
-  });
-
-  const setAttributes = (el, attrs)=>{
-    for(let key in attrs) {
-      el.setAttribute(key, attrs[key]);
-    }
-  };
-
-  setAttributes(main, {"attrName":"", "attrGender":"", "attrStatus":"", "attrMovie":""});
-
-  movieOptions = movieOptions.reduce((initial, elem)=>{
-    return initial.concat(elem);
-  }, []);
-
-  movieOptions = movieOptions.filter((item)=>{
-    return item !== undefined;
+    document.querySelector('.header').insertAdjacentHTML("beforeEnd", card);
   });
 
   let setGender = new Set(genderOptions),
-      setCharStatus = new Set(statusOptions),
-      setMovieOptions = new Set(movieOptions);
+      setCharStatus = new Set(statusOptions);
 
   let noItems = document.createElement('div');
       noItems.textContent = 'Cовпадений не найдено';
@@ -79,7 +67,6 @@ function practice(response){
 
   addOptions(setGender, '#selectGenderId');
   addOptions(setCharStatus, '#selectStatusId');
-  addOptions(setMovieOptions, '#selectMovieId');
 
   let cards = document.querySelectorAll('.card');
 
@@ -92,6 +79,7 @@ function practice(response){
         }
         else{
           item.classList.remove('hide');
+          console.log(item.textContent);
         }
       });
     } else if(val == ''){
@@ -101,44 +89,36 @@ function practice(response){
     }
   });
 
-  main.addEventListener('change', (event)=>{
+  document.querySelector('#main').addEventListener('change', (event)=>{
     let target = event.target;
-    document.querySelector('#inputName').value = '';
-    
     if(target.matches('#selectNameId')){
-      main.setAttribute('attrName', `${target.value}`);
-      if(main.attributes.attrname.value === 'all'){
-        main.removeAttribute('attrName');
+      document.querySelector('#main').setAttribute('attrName', `${target.value}`);
+      if(document.querySelector('#main').attributes.attrname.value === 'all'){
+        document.querySelector('#main').removeAttribute('attrName');
       }
     }
     if(target.matches('#selectGenderId')){
-      main.setAttribute('attrGender', `${target.value}`);
-      if(main.attributes.attrgender.value === 'all'){
-        main.removeAttribute('attrGender');
+      document.querySelector('#main').setAttribute('attrGender', `${target.value}`);
+      if(document.querySelector('#main').attributes.attrgender.value === 'all'){
+        document.querySelector('#main').removeAttribute('attrGender');
       }
     }
     if(target.matches('#selectStatusId')){
-      main.setAttribute('attrStatus', `${target.value}`);
-      if(main.attributes.attrstatus.value === 'all'){
-        main.removeAttribute('attrStatus');
-      }
-    }
-    if(target.matches('#selectMovieId')){
-      main.setAttribute('attrMovie', `${target.value}`);
-      if(main.attributes.attrmovie.value === 'all'){
-        main.removeAttribute('attrMovie');
+      document.querySelector('#main').setAttribute('attrStatus', `${target.value}`);
+      if(document.querySelector('#main').attributes.attrstatus.value === 'all'){
+        document.querySelector('#main').removeAttribute('attrStatus');
       }
     }
 
     cards.forEach((item)=>{
       if(document.querySelectorAll('.hide').length == cards.length){
-        header.append(noItems);
+        document.querySelector('.header').append(noItems);
       }
       else{
         noItems.remove();
       }
-      if(main.attributes.attrname){
-        if(item.attributes.attrname.value !== main.attributes.attrname.value){
+      if(document.querySelector('#main').attributes.attrname){
+        if(item.attributes.attrname.value !== document.querySelector('#main').attributes.attrname.value){
         item.classList.add('hide');
       } else{
         item.classList.remove('hide');
@@ -146,58 +126,50 @@ function practice(response){
     } else{
       item.classList.remove('hide');
     }
-    if(main.attributes.attrgender){ 
-      if(item.attributes.attrgender.value !== main.attributes.attrgender.value){
+    if(document.querySelector('#main').attributes.attrgender){ 
+      if(item.attributes.attrgender.value !== document.querySelector('#main').attributes.attrgender.value){
         item.classList.add('hide');
       }else{
         item.classList.remove('hide');
       }
     }
-    if(main.attributes.attrstatus){ 
-      if(item.attributes.attrstatus.value !== main.attributes.attrstatus.value){
+    if(document.querySelector('#main').attributes.attrstatus){ 
+      if(item.attributes.attrstatus.value !== document.querySelector('#main').attributes.attrstatus.value){
         item.classList.add('hide');
       }else{
         item.classList.remove('hide');
       }
     }
-    if(main.attributes.attrmovie){
-      if(item.attributes.attrmovie.value.search(main.attributes.attrmovie.value) == -1){
-        item.classList.add('hide');
-      }
-      else{
-        item.classList.remove('hide');
-      }
-    }
-    if(main.attributes.attrgender && main.attributes.attrstatus){
-      if(item.attributes.attrstatus.value == main.attributes.attrstatus.value &&
-      item.attributes.attrgender.value == main.attributes.attrgender.value){
+    if(document.querySelector('#main').attributes.attrgender && document.querySelector('#main').attributes.attrstatus){
+      if(item.attributes.attrstatus.value == document.querySelector('#main').attributes.attrstatus.value &&
+      item.attributes.attrgender.value == document.querySelector('#main').attributes.attrgender.value){
         item.classList.remove('hide');
       }else{
         item.classList.add('hide');
       }
     }
-    if(main.attributes.attrname && main.attributes.attrstatus){
-      if(item.attributes.attrstatus.value == main.attributes.attrstatus.value &&
-      item.attributes.attrname.value == main.attributes.attrname.value){
+    if(document.querySelector('#main').attributes.attrname && document.querySelector('#main').attributes.attrstatus){
+      if(item.attributes.attrstatus.value == document.querySelector('#main').attributes.attrstatus.value &&
+      item.attributes.attrname.value == document.querySelector('#main').attributes.attrname.value){
         item.classList.remove('hide');
       }else{
         item.classList.add('hide');
       }
     }
-    if(main.attributes.attrname && main.attributes.attrgender){
-      if(item.attributes.attrgender.value == main.attributes.attrgender.value &&
-      item.attributes.attrname.value == main.attributes.attrname.value){
+    if(document.querySelector('#main').attributes.attrname && document.querySelector('#main').attributes.attrgender){
+      if(item.attributes.attrgender.value == document.querySelector('#main').attributes.attrgender.value &&
+      item.attributes.attrname.value == document.querySelector('#main').attributes.attrname.value){
         item.classList.remove('hide');
       }else{
         item.classList.add('hide');
       }
     }
-    if(main.attributes.attrgender && 
-    main.attributes.attrstatus && 
-    main.attributes.attrname){
-      if(item.attributes.attrstatus.value == main.attributes.attrstatus.value &&
-      item.attributes.attrgender.value == main.attributes.attrgender.value &&
-      item.attributes.attrname.value == main.attributes.attrname.value){
+    if(document.querySelector('#main').attributes.attrgender && 
+    document.querySelector('#main').attributes.attrstatus && 
+    document.querySelector('#main').attributes.attrname){
+      if(item.attributes.attrstatus.value == document.querySelector('#main').attributes.attrstatus.value &&
+      item.attributes.attrgender.value == document.querySelector('#main').attributes.attrgender.value &&
+      item.attributes.attrname.value == document.querySelector('#main').attributes.attrname.value){
         item.classList.remove('hide');
       }else{
         item.classList.add('hide');
