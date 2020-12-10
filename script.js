@@ -1,17 +1,10 @@
 document.addEventListener('DOMContentLoaded', ()=>{
 'use strict';
 
-
-const photo = document.querySelector('.photo');
-const genderOptions = [];
-const statusOptions = [];
-const apiUrl = './dbHeroes.json';
-
-/* async function getHeroes(){
-  const response = await fetch(apiUrl);
-  const data = await response.json();
-}
-getHeroes(); */
+const genderOptions = [],
+      statusOptions = [],
+      apiUrl = './dbHeroes.json';
+let movieOptions = [];
 
  
 fetch(apiUrl)
@@ -20,10 +13,12 @@ fetch(apiUrl)
 
 function practice(response){
 
-  response.forEach(({realName, gender, status, photo})=>{
+  response.forEach(({realName, gender, status, photo, movies})=>{
 
     genderOptions.push(gender);
     statusOptions.push(status);
+    movieOptions.push(movies);
+
 
     let optionName = document.createElement('option');
     optionName.textContent = realName;
@@ -50,8 +45,17 @@ function practice(response){
     document.querySelector('.header').insertAdjacentHTML("beforeEnd", card);
   });
 
+  movieOptions = movieOptions.reduce((initial, item)=>{
+    return initial.concat(item);
+  }, []);
+
+  movieOptions = movieOptions.filter((item)=>{
+    return item !== undefined;
+  });
+
   let setGender = new Set(genderOptions),
-      setCharStatus = new Set(statusOptions);
+      setCharStatus = new Set(statusOptions),
+      setMovie = new Set(movieOptions);
 
   let noItems = document.createElement('div');
       noItems.textContent = 'Cовпадений не найдено';
@@ -67,6 +71,7 @@ function practice(response){
 
   addOptions(setGender, '#selectGenderId');
   addOptions(setCharStatus, '#selectStatusId');
+  addOptions(setMovie, '#selectMovieId');
 
   let cards = document.querySelectorAll('.card');
 
